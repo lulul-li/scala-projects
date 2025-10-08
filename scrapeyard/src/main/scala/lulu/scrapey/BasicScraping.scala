@@ -66,9 +66,12 @@ object BasicScraping {
 
   }
 
+  case class Article(title: String, url: String, tags: List[String])
+
   def rockJvm() = {
     val mainDoc = Jsoup.connect("https://rockthejvm.com/articles/1").get()
-    val pageCount = mainDoc.select("footer span").next().text()
+    //val pageCount = mainDoc.select("footer span").next().text()
+    val pageCount = mainDoc.select("footer>nav>div.hidden").select("a").asScala.filter(link => Option(link.attr("href")).nonEmpty).map(_.text().toInt).max
     println(pageCount)
 
     val data = (1 to 2).map { i =>
@@ -78,18 +81,51 @@ object BasicScraping {
         val header = a.select("h2 a")
         val url = header.attr("href")
 
-        val tags= a.select("a").asScala.filter(t=> Option(t.attr("href")).exists(_.contains("/tags/")))
+        val tags = a.select("a").asScala.filter(t => Option(t.attr("href")).exists(_.contains("/tags/")))
         println(tags)
-//        println(
-//          s"""Title: ${header.text()}
-//             | url : ${url}""".stripMargin)
+        //        println(
+        //          s"""Title: ${header.text()}
+        //             | url : ${url}""".stripMargin)
       }
     }
   }
 
+
+  def scrapeNPage(): Int = {
+    Jsoup.connect("https://rockthejvm.com/articles/1").get()
+      .select("footer>nav>div.hidden")
+      .select("a")
+      .asScala
+      .filter(link => Option(link.attr("href")).nonEmpty)
+      .map(_.text().toInt)
+      .max
+  }
+
+  def fetchSinglePage(page:Int):List[Article]={
+    Jsoup.connect(s"https://rockthejvm.com/articles/$page").get()
+      .select("article")
+      .asScala
+      .toList
+      .map{ article =>
+        val title = article.select("h2").text()
+        val url = Option(article.select("h2 a").attr("href")).getOrElse("/")
+        val tags= article.select("div>a").asScala.map(link => Option(link.attr("href")).getOrElse("")).toList
+        
+        Article(title,url,tags)
+      }
+
+  }
+
+
+  def rockJvmSolution() = {
+    (1 to scrapeNPage()).toList.flatMap(fetchSinglePage)
+  }
+
   def main(args: Array[String]): Unit = {
     //parseLobstersDiscussion("s/bu1a84/i_brain_coded_static_image_gallery_few").foreach(println)
-     rockJvm()
+//    rockJvmSolution().foreach{ article =>
+//      println(s"${article.title} [${article.tags.mkString(",")}]")
+//    }
   }
 
 }
