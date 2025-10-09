@@ -1,4 +1,4 @@
-package lulu.scrapey
+package lulu.scrapey.guardianscraper
 
 import org.jsoup.Jsoup
 
@@ -10,7 +10,7 @@ case class Headline(title: String, url: String)
 object GuardianScraper {
   val url = "https://www.theguardian.com"
   val contentSelector = "div[id *= container-]>ul>li a"
-  val interestingSection = List("world", "football")
+  val interestingSection = List("australia-news")
   def scrapeHeadline(section:String): List[Headline] = {
     Jsoup.connect(s"$url/$section").get()
       .select(contentSelector)

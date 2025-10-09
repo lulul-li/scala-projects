@@ -9,9 +9,11 @@ lazy val scrapeyard = (project in file("scrapeyard"))
       "com.lihaoyi" %% "requests"  % "0.9.0",
       "com.lihaoyi" %% "upickle"  % "4.2.1",
       "org.scala-lang.modules" %% "scala-parallel-collections" % "1.2.0",
+      "com.github.pureconfig"   %% "pureconfig-core"           % "0.17.9",
       "org.quartz-scheduler"    % "quartz"                     % "2.5.0",
       "org.quartz-scheduler"    % "quartz-jobs"                % "2.5.0",
-      "com.sun.mail"            % "javax.mail"                 % "1.6.2"
+      "com.sun.mail"            % "javax.mail"                 % "1.6.2",
+      "ch.qos.logback" % "logback-classic" % "1.5.19"
     )
   )
 

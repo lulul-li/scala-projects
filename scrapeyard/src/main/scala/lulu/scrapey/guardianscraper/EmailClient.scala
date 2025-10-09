@@ -1,16 +1,17 @@
-package lulu.scrapey
+package lulu.scrapey.guardianscraper
+
+import org.slf4j.LoggerFactory
+import pureconfig.ConfigSource
 
 import java.util.{Properties, UUID}
 import javax.mail.internet.{InternetAddress, MimeMessage}
-import javax.mail.{Authenticator, Message, PasswordAuthentication, Session, Transport}
+import javax.mail.*
 
-object EmailClient {
-  val user = "piper.altenwerth@ethereal.email"
-  val password = "MA8tbYUtfznAkDE9Wh"
-  val host = "smtp.ethereal.email"
-  val port = "587"
+class EmailClient private(host: String, port: Int, user: String, password: String) {
+  val log= LoggerFactory.getLogger(this.getClass)
 
   def sendEmail(to: String, subject: String, body: String) = {
+    log.info("start sendEmail")
     // 1 - session
     val props = new Properties()
     props.put("mail.smtp.host", host)
@@ -33,7 +34,7 @@ object EmailClient {
 
     try {
       Transport.send(msg)
-      println("Email sent successfully")
+      log.info("Email sent successfully")
     }
     catch {
       case e: Exception =>
@@ -41,12 +42,24 @@ object EmailClient {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    sendEmail("user@email.com", "First email",
-      """
-        |<div>
-        |hello
-        |</div>
-        |""".stripMargin)
-  }
+
+}
+
+object EmailClient {
+  val default:EmailClient = ConfigSource.default.load[ScraperConfig]
+    .map(_.emailConfig)
+    .map{
+      case EmailConfig(host,port,user,password) => {
+        println(s"EmailConfig $host , $port, $user, $password")
+        EmailClient(host, port, user, password)
+      }
+    }
+    .fold(
+      e => {
+        println(e)
+        throw new IllegalArgumentException("Error ")
+
+      },
+      client => client
+    )
 }
