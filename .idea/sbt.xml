@@ -8,12 +8,17 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/chat-app/js" />
+            <option value="$PROJECT_DIR$/chat-app/jvm" />
+            <option value="$PROJECT_DIR$/chat-app/shared" />
             <option value="$PROJECT_DIR$/project" />
             <option value="$PROJECT_DIR$/scrapeyard" />
+            <option value="$PROJECT_DIR$/staticsite" />
           </set>
         </option>
         <option name="sbtVersion" value="1.11.7" />
-        <option name="separateProdAndTestSourcesIsExplicit" value="true" />
+        <option name="useSbtShellForBuild" value="true" />
+        <option name="useSbtShellForImport" value="true" />
       </SbtProjectSettings>
     </option>
   </component>

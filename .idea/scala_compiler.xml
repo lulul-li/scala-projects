@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <option name="separateProdTestSources" value="true" />
-    <profile name="sbt 1" modules="projects,projects.main,projects.scrapeyard,projects.scrapeyard.main,projects.scrapeyard.test,projects.test" />
+    <profile name="sbt 1" modules="projects,projects.backend,projects.backend.main,projects.backend.test,projects.chat-app-backend,projects.chat-app-backend.main,projects.chat-app-backend.test,projects.frontend,projects.main,projects.scrapeyard,projects.scrapeyard.main,projects.scrapeyard.test,projects.staticsite,projects.staticsite.main,projects.staticsite.test,projects.test" />
+    <profile name="sbt 2" modules="projects.frontend.main,projects.frontend.test">
+      <parameters>
+        <parameter value="-scalajs" />
+      </parameters>
+    </profile>
   </component>
 </project>
